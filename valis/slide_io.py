@@ -1634,8 +1634,14 @@ class VipsSlideReader(SlideReader):
 
         res_xyu = None
         if self.use_openslide:
-            x_res = eval(vips_img.get('openslide.mpp-x'))
-            y_res = eval(vips_img.get('openslide.mpp-y'))
+            try:
+                x_res = eval(vips_img.get('openslide.mpp-x'))
+            except:
+                x_res = '0.2737039036741847'
+            try:
+                y_res = eval(vips_img.get('openslide.mpp-y'))
+            except:
+                y_res = '0.2737039036741847'
             vips_img.get('slide-associated-images')
             phys_unit = MICRON_UNIT
         else:
