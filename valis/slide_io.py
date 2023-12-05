@@ -55,14 +55,14 @@ PIXEL_UNIT = "px"
 MICRON_UNIT = u'\u00B5m'
 """str: Phyiscal unit for micron/micrometers"""
 
-ALL_OPENSLIDE_READABLE_FORMATS = [".svs", ".tif", ".vms", ".vmu", ".ndpi", ".scn", ".mrxs", ".tiff", ".svslide", ".bif"]
+ALL_OPENSLIDE_READABLE_FORMATS = [".svs", ".tif", ".vms", ".vmu", ".ndpi", ".scn", ".mrxs", ".tiff", ".svslide", ".bif", ".vsi"]
 """list: File extensions that OpenSlide can read"""
 
-BF_READABLE_FORMATS = None
+BF_READABLE_FORMATS = []
 """list: File extensions that Bioformats can read.
    Filled in after initializing JVM"""
 
-OPENSLIDE_ONLY = None
+OPENSLIDE_ONLY = ALL_OPENSLIDE_READABLE_FORMATS
 """list: File extensions that OpenSlide can read but Bioformats can't.
    Filled in after initializingJVM"""
 
@@ -181,6 +181,7 @@ Keeping the code just in case need to use javabridge again.
 
 
 def init_jvm(jar=None, mem_gb=10):
+    return
     """Initialize JVM for BioFormats
 
     Parameters
