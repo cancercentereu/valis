@@ -181,7 +181,7 @@ Keeping the code just in case need to use javabridge again.
 
 
 def init_jvm(jar=None, mem_gb=10):
-    return
+    # return
     """Initialize JVM for BioFormats
 
     Parameters
@@ -235,6 +235,7 @@ def init_jvm(jar=None, mem_gb=10):
 
 
 def kill_jvm():
+    return
     """Kill JVM for BioFormats
     """
     try:
@@ -1331,6 +1332,7 @@ class VipsSlideReader(SlideReader):
             # Need to update the n_channels based on bioformats metadata if toilet roll .ome.tiff
             slide_meta.n_channels = bf_reader.metadata.n_channels
             slide_meta.pixel_physical_size_xyu = bf_reader.metadata.pixel_physical_size_xyu
+            print(f'{slide_meta.pixel_physical_size_xyu=}')
             slide_meta.bf_pixel_type = bf_reader.metadata.bf_pixel_type
             slide_meta.is_little_endian = bf_reader.metadata.is_little_endian
             slide_meta.original_xml = bf_reader.metadata.original_xml
@@ -1636,12 +1638,10 @@ class VipsSlideReader(SlideReader):
         if self.use_openslide:
             try:
                 x_res = eval(vips_img.get('openslide.mpp-x'))
-            except:
-                x_res = '0.2737039036741847'
-            try:
                 y_res = eval(vips_img.get('openslide.mpp-y'))
             except:
-                y_res = '0.2737039036741847'
+                x_res = 0.2737039036741847
+                y_res = 0.2737039036741847
             vips_img.get('slide-associated-images')
             phys_unit = MICRON_UNIT
         else:

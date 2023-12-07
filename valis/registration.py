@@ -3977,6 +3977,42 @@ class Valis(object):
 
         return self.summary_df
 
+    def register_get_transformation_matrix(
+        self, brightfield_processing_cls=DEFAULT_BRIGHTFIELD_CLASS,
+        brightfield_processing_kwargs=DEFAULT_BRIGHTFIELD_PROCESSING_ARGS,
+        if_processing_cls=DEFAULT_FLOURESCENCE_CLASS,
+        if_processing_kwargs=DEFAULT_FLOURESCENCE_PROCESSING_ARGS,
+        processor_dict=None,
+        reader_cls=None):
+        self.start_time = time()
+        try:
+            print("\n==== Converting images\n")
+            self.convert_imgs(series=self.series, reader_cls=reader_cls)
+
+            print("\n==== Processing images\n")
+            slide_processors = self.create_img_processor_dict(brightfield_processing_cls=brightfield_processing_cls,
+                                            brightfield_processing_kwargs=brightfield_processing_kwargs,
+                                            if_processing_cls=if_processing_cls,
+                                            if_processing_kwargs=if_processing_kwargs,
+                                            processor_dict=processor_dict)
+
+            self.brightfield_procsseing_fxn_str = brightfield_processing_cls.__name__
+            self.if_processing_fxn_str = if_processing_cls.__name__
+            self.process_imgs(processor_dict=slide_processors)
+
+            # print("\n==== Rigid registration\n")
+            _ = self.rigid_register()
+            return {
+                k: v.M
+                for k, v in self.slide_dict.items()
+            }
+
+        except Exception as e:
+            valtils.print_warning(e, rgb=Fore.RED)
+            print(traceback.format_exc())
+            kill_jvm()
+            return None, None, None
+
     def register(self, brightfield_processing_cls=DEFAULT_BRIGHTFIELD_CLASS,
                  brightfield_processing_kwargs=DEFAULT_BRIGHTFIELD_PROCESSING_ARGS,
                  if_processing_cls=DEFAULT_FLOURESCENCE_CLASS,
